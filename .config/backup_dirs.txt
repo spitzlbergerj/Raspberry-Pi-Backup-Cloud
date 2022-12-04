@@ -1,3 +1,0 @@
-/etc/fstab
-/home/pi/.smbcredentials
-/usr/local/bin/pishutdown.py
