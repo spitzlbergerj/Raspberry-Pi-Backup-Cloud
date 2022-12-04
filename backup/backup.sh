@@ -13,6 +13,7 @@ BACKUP_PFAD_LOKAL="/home/pi/backup"
 CONFIG_NAME="${BACKUP_PFAD_LOKAL}/.config/backup_name.txt"
 CONFIG_DIRS="${BACKUP_PFAD_LOKAL}/.config/backup_dirs.txt"
 CONFIG_RCLONE="${BACKUP_PFAD_LOKAL}/.config/rclone.conf"
+CONFIG_2ND_SCRIPT="${BACKUP_PFAD_LOKAL}/.config/backup2ndScript.sh"
 
 # initialisieren
 BACKUP_DIR_HEAD="default-geraet"
@@ -109,6 +110,12 @@ do
     echo "   ... kopieren Datei"
     cp ${LINE} ${copypath}/
 done < ${CONFIG_DIRS}
+
+# starten des zusaetzlichen Backup Skripts fuer Sonderfaelle
+if [ -f "$CONFIG_2ND_SCRIPT" ]; then
+    echo "... 2. Skript aufrufen"
+    ${CONFIG_2ND_SCRIPT} ${BACKUP_DIR}
+fi
 
 # Alte Sicherungen die nach X neuen Sicherungen entfernen
 echo "alte Sicherungen loeschen ....."
