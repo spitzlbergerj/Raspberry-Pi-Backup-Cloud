@@ -11,6 +11,11 @@ Clonen des Repositorys mit diesen Kommandos
 cd ~
 git clone https://github.com/spitzlbergerj/Raspberry-Pi-Backup-Cloud
 ````
+Das Repository wird hierbei an diesen Pfad gecloned: ```/home/pi/Raspberry-Pi-Backup-Cloud```
+Um die Skripte einfach handhabbar zu machen setzen wir noch einen symbolischen Link
+```
+ln -s /home/pi/Raspberry-Pi-Backup-Cloud/backup /home/pi/backup
+```
 
 Der Pfad für das Backup Skript und alle Config-Dateien ist danach ```/home/pi/backup```
 
