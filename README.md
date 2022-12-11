@@ -65,3 +65,8 @@ Folgende Zeilen sind in die crontab des Users root einzufügen
 # Backup Dateien starten
 05 01 * * *  /home/pi/backup/backup.sh >>/home/pi/.logs/backup.log 2>&1
 ```
+
+# rclone installieren
+```
+sudo apt install rclone
+```
