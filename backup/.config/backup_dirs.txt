@@ -1,0 +1,4 @@
+/etc/fstab
+/home/pi/.smbcredentials
+/home/pi/wasweissichdir/xyzskript.py
+/etc/logrotate.conf
