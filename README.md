@@ -68,10 +68,7 @@ Folgende Zeilen sind in die crontab des Users root einzufügen
 
 # rclone installieren
 
-Das Skript rclone wird über nachfolgendes Kommando installiert:
-```
-curl https://rclone.org/install.sh | sudo bash
-```
+rclone bitte nach Anleitung unter https://rclone.org/install/ installieren
 
 Ein neuer Remote-Speicher kann über nachfolgendes Kommando eingerichtet werden
 ```
