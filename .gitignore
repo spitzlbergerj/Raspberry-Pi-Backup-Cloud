@@ -1,1 +1,7 @@
-**/backup/.config
+# .gitignore Raspberry-Pi-Backup-Cloud
+
+# Verzeichnis .config
+# Verzeichnis anlegen
+!backup/.config/
+# Inhalt igornieren
+backup/.config/*
