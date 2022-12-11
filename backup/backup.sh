@@ -119,7 +119,7 @@ fi
 
 # Alte Sicherungen die nach X neuen Sicherungen entfernen
 echo "alte Sicherungen loeschen ....."
-pushd ${BACKUP_PFAD_LOKAL}/backups; ls -drt1 ${BACKUP_PFAD_LOKAL}/backups/* | head -n -${BACKUP_ANZAHL} | xargs rm -r; popd
+pushd ${BACKUP_PFAD_LOKAL}/backups; ls -drt1 ${BACKUP_PFAD_LOKAL}/backups/${BACKUP_DIR_HEAD}* | head -n -${BACKUP_ANZAHL} | xargs rm -r; popd
 
 # Synchronisieren in die Cloud
 echo "rclone sync starten ..." 
