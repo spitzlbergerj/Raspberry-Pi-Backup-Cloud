@@ -5,7 +5,12 @@ Raspberry Pi backup script to store parameterizable files in the cloud via rclon
 
 ## Clonen ins Home von User pi /home/pi
 
-Clonen des Repositorys mit diesen Kommando
+Clonen des Repositorys mit diesen Kommandos
+
+````
+cd ~
+git clone https://github.com/spitzlbergerj/Raspberry-Pi-Backup-Cloud
+````
 
 Der Pfad für das Backup Skript und alle Config-Dateien ist danach ```/home/pi/backup```
 
