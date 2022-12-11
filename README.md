@@ -18,9 +18,10 @@ ln -s /home/pi/Raspberry-Pi-Backup-Cloud/backup /home/pi/backup
 ```
 Der Pfad für das Backup Skript und alle Config-Dateien ist danach ```/home/pi/backup```
 
-Schließlich muss das Skript noch ausführbar gemacht werden
+Schließlich muss das Skript und ein eventuelles 2. Backup Skript noch ausführbar gemacht werden
 ```
-chmod +x /home/pi/backup/backup.sh
+chmod +x /home/pi/backup/backup.sh /home/pi/backup/.config/backup2ndScript.sh
+
 ```
 
 ## Ändern der Dateien in .config
