@@ -18,6 +18,15 @@ ln -s /home/pi/Raspberry-Pi-Backup-Cloud/backup /home/pi/backup
 ```
 Der Pfad für das Backup Skript und alle Config-Dateien ist danach ```/home/pi/backup```
 
+Nun sind alle .config Dateien umzubenennen
+```
+mv /home/pi/backup/.config/backup2ndScript.sh-muster /home/pi/backup/.config/backup2ndScript.sh
+mv /home/pi/backup/.config/backup_dirs.txt-muster /home/pi/backup/.config/backup_dirs.txt
+mv /home/pi/backup/.config/backup_name.txt-muster /home/pi/backup/.config/backup_name.txt
+mv /home/pi/backup/.config/rclone.conf-muster /home/pi/backup/.config/rclone.conf
+
+```
+
 Schließlich muss das Skript und ein eventuelles 2. Backup Skript noch ausführbar gemacht werden
 ```
 chmod +x /home/pi/backup/backup.sh /home/pi/backup/.config/backup2ndScript.sh
