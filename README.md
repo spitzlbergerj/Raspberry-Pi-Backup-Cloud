@@ -67,6 +67,39 @@ Folgende Zeilen sind in die crontab des Users root einzufügen
 ```
 
 # rclone installieren
+
+Das Skript rclone wird über nachfolgendes Kommando installiert:
 ```
-sudo apt install rclone
+curl https://rclone.org/install.sh | sudo bash
 ```
+
+Ein neuer Remote-Speicher kann über nachfolgendes Kommando eingerichtet werden
+```
+rclone config
+```
+
+Für mein Google Drive mache ich nachfolgende Eingaben. Bitte beachten Sie, dass Sie vor diesem Schritt auf der Google Developer Console einen Account anlegen müssen und Ihre client_id und Ihren client_secret ermitteln müssen. Da Google die Verfahrensschritte hierzu immer wieder ändert, gebe ich hier keine Anleitung. Auf der [rclone Website](https://rclone.org/drive/#making-your-own-client-id) findet sich jedoch der Hinweis wie die Schritte aktuell sind.
+```
+n/s/q> n
+name> MeinGoogleDrive
+storage> 18 <Google Drive> (bitte kontrollieren, ändert sich von Version zu Version)
+client_id> IhreGeheimeClientID
+client_secret> IhrGemeinesPasswort
+scope> 1 
+root_folder_id> <leer lassen>
+service_account_file> <leer lassen>
+Edit advanced config? (y/n) n
+Remote config, Use auto config? y
+```
+An dieser Stelle ist eine Sicherheitsüberprüfung erforderlich, die davon abhängt, wie Sie ihr Google Konto gesichert haben. Folgen Sie den Anweisungen, die rclone hier ausgibt. Danach geht es weiter:
+```
+Configure this as a team drive? n
+Yes this is OK y
+```
+
+Nach diesen Schritten haben Sie Zugriff auf Ihren Cloudspeicher. Dies können Sie testen mit folgendem Kommando
+```
+rclone -v lsf MeinGoogleDrive:
+```
+Nun sollte Ihnen Ihr Google Drive aufgelistet werden.
+
