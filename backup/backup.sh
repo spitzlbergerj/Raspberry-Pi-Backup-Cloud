@@ -111,10 +111,11 @@ do
     cp ${LINE} ${copypath}/
 done < ${CONFIG_DIRS}
 
-# starten des zusaetzlichen Backup Skripts fuer Sonderfaelle
+# starten des zusaetzlichen Backup Skripts fuer Sonderfaelle und sichern desselben
 if [ -f "$CONFIG_2ND_SCRIPT" ]; then
     echo "... 2. Skript aufrufen"
     ${CONFIG_2ND_SCRIPT} ${BACKUP_DIR}
+    cp ${CONFIG_2ND_SCRIPT} ${BACKUP_DIR}/backup
 fi
 
 # Alte Sicherungen die nach X neuen Sicherungen entfernen
