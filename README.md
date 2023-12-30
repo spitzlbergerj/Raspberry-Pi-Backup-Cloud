@@ -1,5 +1,5 @@
 # Raspberry-Pi-Backup-Cloud
-Backup Script zum sichern einer Raspberry Pi Installation. 
+Backup Script zum Sichern einer Raspberry Pi Installation. 
 Es werden zunächst eine Reihe von Systemdateien und Zuständen gesichert. Anschließend werden alle Dateien und Verzeichnisse gesichert, die in einer Konfigurationsdatei hinterlegt sind. Schließlich wird ein spezielles Backup Skript aufgerufen (falls vorhanden), in dem z.B. die Backup Anweisung zum Sichern einer Datenbank hinterlegt werden können.
 
 Zum Sichern wird rclone verwendet, so dass die Daten in beliebigen Cloud-Speichern oder auf Netz- oder auf lokalen Laufwerken gesichert werden können.
@@ -7,7 +7,7 @@ Zum Sichern wird rclone verwendet, so dass die Daten in beliebigen Cloud-Speiche
 Die Sicherung wird nach einem konfigurierbaren Gerätenamen benannt. Die Anzahl der aufzubewahrenden täglichen Sicherungen ist ebenfalls konfigurierbar.
 
 ## automatisch gesicherte Systemdateien
-Diese müssen nicht in der config angegeben sein:
+Diese müssen nicht in der config angegeben sein:  
 ````
 /boot/config.txt
 /boot/cmdline.txt
@@ -18,7 +18,7 @@ rclone config
 ````
 
 ## Systemzustände die gesichert werden
-Die Ausgabe nachfolgender Befehle werden ebenfalls gesichert
+Die Ausgabe nachfolgender Befehle werden ebenfalls gesichert  
 ````
 (sudo) crontab -l
 ps -ax
@@ -29,8 +29,7 @@ df -h
 ````
 
 # Versionen
-Dezember 2022   initiale Version
-
+Dezember 2022   initiale Version  
 Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben und diverse Systembefahlausgaben
 
 # Installation
@@ -78,7 +77,7 @@ Die Konfiguration für rclone befindet sich in ```.config/rclone.conf```
 
 
 ## ggf. hinzufügen eines Spezialskripts für weitere Sicherungen
-
+Ändern Sie dazu das Skript in
 ```.config/backup2ndScript.sh```
 
 
@@ -100,12 +99,15 @@ Folgende Zeilen sind in die crontab des Users root einzufügen
 
 # rclone installieren
 
-rclone bitte nach Anleitung unter https://rclone.org/install/ installieren
+rclone bitte nach Anleitung unter https://rclone.org/install/ installieren  
+(in der Regel ausführen des Kommandos ```sudo -v ; curl https://rclone.org/install.sh | sudo bash```)
 
+## neue Konfiguration erstellen
 Ein neuer Remote-Speicher kann über nachfolgendes Kommando eingerichtet werden
 ```
 rclone config
 ```
+Falls Sie bereits eine rclone.conf mit korrekten Angaben (aus einer anderen Installation) haben, lesen Sie bitte unten unter "vorhandene Konfiguration verwenden" weiter
 
 Für mein Google Drive mache ich nachfolgende Eingaben. Bitte beachten Sie, dass Sie vor diesem Schritt auf der Google Developer Console einen Account anlegen müssen und Ihre client_id und Ihren client_secret ermitteln müssen. Da Google die Verfahrensschritte hierzu immer wieder ändert, gebe ich hier keine Anleitung. Auf der [rclone Website](https://rclone.org/drive/#making-your-own-client-id) findet sich jedoch der Hinweis wie die Schritte aktuell sind.
 ```
@@ -131,4 +133,27 @@ Nach diesen Schritten haben Sie Zugriff auf Ihren Cloudspeicher. Dies können Si
 rclone -v lsf MeinGoogleDrive:
 ```
 Nun sollte Ihnen Ihr Google Drive aufgelistet werden.
+
+## vorhandene Konfiguration verwenden
+Falls Sie bereits eine funktionierende rclone.conf aus z. B. einer anderen Installation haben, können Sie das Einrichten vereinfachen. Nach der Installation von rclone kopieren Sie einfach die vorhandene Konfiguration an die entsprechenden Stellen und rclone ist damit vollständig konfiguriert.
+
+Kopieren Sie zunächst ihre vorhandene Konfiguration nach /home/pi/backup/.config/rclone.conf
+
+Dann führen Sie folgende Befehle aus  
+```
+cp /home/pi/backup/.config/rclone.conf /home/pi/.config/rclone/rclone.conf
+sudo cp /home/pi/backup/.config/rclone.conf /root/.config/rclone/rclone.conf
+```
+
+Falls Sie sichergehen wollen, dass die rclone.conf an die richtigen Stellen kopiert wird, überprüfen Sie die Defaultspeicherorte mit
+```
+rclone config
+```
+bzw.
+```
+sudo rclone config
+```
+beim erstmaligen Aufruf dieser Befehle ohne vorherige Konfiguration sollte folgende Meldungen erscheinen
+```NOTICE: Config file "/root/.config/rclone/rclone.conf" not found - using defaults```  
+Diese gibt den Standard-Speicherort an, den Sie oben für die Copy Befehle nutzen
 
