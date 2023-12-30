@@ -1,5 +1,24 @@
 # Raspberry-Pi-Backup-Cloud
-Raspberry Pi backup script to store parameterizable files in the cloud via rclone
+Backup Script zum sichern einer Raspberry Pi Installation. 
+Es werden zunächst eine Reihe von Systemdateien und Zuständen gesichert. Anschließend werden alle Dateien und Verzeichnisse gesichert, die in einer Konfigurationsdatei hinterlegt sind. Schließlich wird ein spezielles Backup Skript aufgerufen (falls vorhanden), in dem z.B. die Backup Anweisung zum Sichern einer Datenbank hinterlegt werden können.
+
+Zum Sichern wird rclone verwendet, so dass die Daten in beliebigen Cloud-Speichern oder auf Netz- oder auf lokalen Laufwerken gesichert werden können.
+
+Die Sicherung wird nach einem konfigurierbaren Gerätenamen benannt. Die Anzahl der aufzubewahrenden täglichen Sicherungen ist ebenfalls konfigurierbar.
+
+Systemdateien, automatisch gesichert, müssen nicht in der config angegeben sein:
+/boot/config.txt
+/boot/cmdline.txt
+/proc/cpuinfo
+/etc/hostname
+/etc/logrotate.conf
+Crontabs von pi und root
+rclone config
+aktuelle Prozessliste (ps -ax)
+
+# Versionen
+Dezember 2022   initiale Version
+Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben
 
 # Installation
 

@@ -1,7 +1,8 @@
 #!/bin/bash
 # --------------------------------------------------
-# Backup Skript für Raspberrys mit Config Dateien
+# Backup Skript fuer Raspberrys mit Config Dateien
 # (c) Josef Spitzlberger, 03.12.2022
+# (c) Josef Spitzlberger, 30.12.2023 erweitert um die Moeglichkeit, in der config Datei auch Verzeichnisse anzugeben
 # --------------------------------------------------
 
 # --------------------------------------------------
@@ -87,28 +88,35 @@ printf "\nProzessliste sichern ...\n\n"
 mkdir ${BACKUP_DIR}/processes
 ps -ax > ${BACKUP_DIR}/processes/ps-ax.txt
 
-# zu sichernde Dateien einlesen und kopieren
-echo "Dateien sichern ..."
+# zu sichernde Dateien und Verzeichnisse einlesen und kopieren
+echo "Dateien und Verzeichnisse sichern ..."
 while IFS= read -r LINE
 do
     echo "... ${LINE}"
 
-    # Directory Pfad anlegen
-    echo "   ... anlegen Sub-Directorys"
-    cd ${BACKUP_DIR}
-    copypath=$(pwd)
-
-    IFS='/'; pathelements=(${LINE:1})
-    for ((i = 0 ; i <= $(( ${#pathelements[@]} - 2 )) ; i++)); do
-        [ ! -d ${pathelements[$i]} ] && mkdir ${pathelements[$i]}
-        cd ${pathelements[$i]}
+    # Ueberpruefen, ob der Pfad ein Verzeichnis ist
+    if [ -d "$LINE" ]; then
+        # Rekursives Kopieren des Verzeichnisses
+        echo "   ... kopieren Verzeichnis"
+        cp -r "$LINE" "${BACKUP_DIR}/"
+    else
+        echo "   ... kopieren Datei"
+        # Directory Pfad anlegen
+        echo "   ... ... anlegen Sub-Directory"
+        cd ${BACKUP_DIR}
         copypath=$(pwd)
-    done
-    unset IFS
 
-    # Datei kopieren
-    echo "   ... kopieren Datei"
-    cp ${LINE} ${copypath}/
+        IFS='/'; pathelements=(${LINE:1})
+        for ((i = 0 ; i <= $(( ${#pathelements[@]} - 2 )) ; i++)); do
+            [ ! -d ${pathelements[$i]} ] && mkdir ${pathelements[$i]}
+            cd ${pathelements[$i]}
+            copypath=$(pwd)
+        done
+        unset IFS
+
+        # Datei kopieren
+        cp ${LINE} ${copypath}/
+    fi
 done < ${CONFIG_DIRS}
 
 # starten des zusaetzlichen Backup Skripts fuer Sonderfaelle und sichern desselben
