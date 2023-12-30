@@ -20,6 +20,8 @@ CONFIG_2ND_SCRIPT="${BACKUP_PFAD_LOKAL}/.config/backup2ndScript.sh"
 BACKUP_DIR_HEAD="default-geraet"
 BACKUP_DIR=${BACKUP_PFAD_LOKAL}/backups/${BACKUP_DIR_HEAD}-$(date +%Y%m%d-%H%M%S)
 BACKUP_ANZAHL="30"
+RCLONE_NAME="clouddrive"
+RCLONE_PATH="backup"
 
 # --------------------------------------------------
 # Konfiguration einlesen
@@ -33,14 +35,18 @@ echo "$(tr -d '\r' < ${CONFIG_DIRS})" > ${CONFIG_DIRS}
 # Geraetename und Anzahl aufzubewahrende Sicherungen lesen, setzen 
 # erste Zeile Geraetename, zweite Zeile Anzahl Tage
 # um sicherzugehen, wird Windows CRLF durch LF ersetzt
-echo "... Geraetename und Anzahl Sicherungen"
+echo "... Geraetename, Anzahl Sicherungen und rclone name einlesen"
 {
     read -r readline_name
     read -r readline_anzahl
+    read -r readline_rlonename
+    read -r readline_rlonepath
 } < ${CONFIG_NAME}
 BACKUP_DIR_HEAD=${readline_name}
 BACKUP_DIR=${BACKUP_PFAD_LOKAL}/backups/${BACKUP_DIR_HEAD}_$(date +%Y%m%d-%H%M%S)
 BACKUP_ANZAHL=$((${readline_anzahl}))
+RCLONE_NAME=$((${readline_rlonename}))
+RCLONE_PATH=$((${readline_rlonepath}))
 
 echo "... Backup Directory: $BACKUP_DIR"
 echo "... Backup Versionen: $BACKUP_ANZAHL"
@@ -141,6 +147,6 @@ pushd ${BACKUP_PFAD_LOKAL}/backups; ls -drt1 ${BACKUP_PFAD_LOKAL}/backups/${BACK
 
 # Synchronisieren in die Cloud
 echo "rclone sync starten ..." 
-rclone sync local:${BACKUP_PFAD_LOKAL}/backups LGBsharepoint:Backup/Geraete/Raspberry/${BACKUP_DIR_HEAD} --config ${CONFIG_RCLONE}
+rclone sync local:${BACKUP_PFAD_LOKAL}/backups ${RCLONE_NAME}:${RCLONE_PATH}/${BACKUP_DIR_HEAD} --config ${CONFIG_RCLONE}
 
 echo "Backup abgeschlossen!" 
