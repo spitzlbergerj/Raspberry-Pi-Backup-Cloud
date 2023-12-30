@@ -5,6 +5,46 @@
 # (c) Josef Spitzlberger, 30.12.2023 erweitert um die Moeglichkeit, in der config Datei auch Verzeichnisse anzugeben
 # --------------------------------------------------
 
+# ---------------------------------------------------------------------
+# Funktion zum rekursiven Sichern der logrotate Konfigurationsdateien
+# ---------------------------------------------------------------------
+
+# Funktion zum Sichern und Durchsuchen von logrotate Konfigurationsdateien und Verzeichnissen
+sichern_und_durchsuchen_logrotate_conf() {
+    local conf_datei_or_dir=$1
+    local backup_pfad=$2
+
+    # Überprüfen, ob es sich um ein Verzeichnis handelt
+    if [ -d "$conf_datei_or_dir" ]; then
+        # Pfad im Backup-Verzeichnis erstellen und Verzeichnis sichern
+        echo "   ... sichern Verzeichnis $conf_datei_or_dir"
+        local dir_path=$(dirname "$conf_datei_or_dir")
+        mkdir -p "$backup_pfad/$dir_path"
+        cp -r "$conf_datei_or_dir" "$backup_pfad/$dir_path"
+        
+        # Alle Dateien im Verzeichnis durchgehen
+        for file in "$conf_datei_or_dir"/*; do
+            [ -f "$file" ] && sichern_und_durchsuchen_logrotate_conf "$file" "$backup_pfad"
+        done
+    elif [ -f "$conf_datei_or_dir" ]; then
+        # Pfad im Backup-Verzeichnis erstellen und Datei sichern
+        echo "   ... sichern Konfigurationsdatei $conf_datei_or_dir"
+        local dir_path=$(dirname "$conf_datei_or_dir")
+        mkdir -p "$backup_pfad/$dir_path"
+        cp "$conf_datei_or_dir" "$backup_pfad/$dir_path"
+
+        # Durchsuchen der Datei nach weiteren Konfigurationsdateien
+        grep -Eo 'include\s+/[^ ]+' "$conf_datei_or_dir" | while IFS= read -r line
+        do
+            local new_conf_file=$(echo $line | awk '{print $2}')
+            if [ -f "$new_conf_file" ] || [ -d "$new_conf_file" ]; then
+                sichern_und_durchsuchen_logrotate_conf "$new_conf_file" "$backup_pfad"
+            fi
+        done
+    fi
+}
+
+
 # --------------------------------------------------
 # Variable
 # --------------------------------------------------
@@ -78,7 +118,8 @@ cp /etc/hostname ${BACKUP_DIR}/etc
 cp /etc/fstab ${BACKUP_DIR}/etc
 
 # logrotate
-cp /etc/logrotate.conf ${BACKUP_DIR}/etc
+# cp /etc/logrotate.conf ${BACKUP_DIR}/etc
+sichern_und_durchsuchen_logrotate_conf "/etc/logrotate.conf" "${BACKUP_DIR}"
 
 # Crontabs
 printf "\nCrontabs sichern ...\n"
