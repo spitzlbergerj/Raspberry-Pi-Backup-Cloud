@@ -45,11 +45,13 @@ echo "... Geraetename, Anzahl Sicherungen und rclone name einlesen"
 BACKUP_DIR_HEAD=${readline_name}
 BACKUP_DIR=${BACKUP_PFAD_LOKAL}/backups/${BACKUP_DIR_HEAD}_$(date +%Y%m%d-%H%M%S)
 BACKUP_ANZAHL=$((${readline_anzahl}))
-RCLONE_NAME=$((${readline_rlonename}))
-RCLONE_PATH=$((${readline_rlonepath}))
+RCLONE_NAME=${readline_rlonename}
+RCLONE_PATH=${readline_rlonepath}
 
 echo "... Backup Directory: $BACKUP_DIR"
 echo "... Backup Versionen: $BACKUP_ANZAHL"
+echo "... rclone Name: $RCLONE_NAME"
+echo "... Cloud Pfad: $RCLONE_PATH"
 
 echo "... Backup Directory anlegen"
 mkdir ${BACKUP_DIR}
@@ -94,9 +96,10 @@ df -h > ${BACKUP_DIR}/dienste_software/df_h.txt
 
 # rclone
 printf "\nrclone config sichern ...\n"
-mkdir ${BACKUP_DIR}/rclone ${BACKUP_DIR}/rclone/root ${BACKUP_DIR}/rclone/pi
+mkdir ${BACKUP_DIR}/rclone ${BACKUP_DIR}/rclone/root ${BACKUP_DIR}/rclone/pi ${BACKUP_DIR}/rclone/backup_sh
 cp /root/.config/rclone/rclone.conf ${BACKUP_DIR}/rclone/root
 cp /home/pi/.config/rclone/rclone.conf ${BACKUP_DIR}/rclone/pi
+cp ${CONFIG_RCLONE} ${BACKUP_DIR}/rclone/backup_sh
 
 # Sichern Prozessliste
 printf "\nProzessliste sichern ...\n\n"
@@ -109,27 +112,27 @@ while IFS= read -r LINE
 do
     echo "... ${LINE}"
 
+    # Pfad im Backup-Verzeichnis erstellen
+    echo "   ... ... anlegen Sub-Directory"
+    cd ${BACKUP_DIR}
+    copypath=$(pwd)
+
+    IFS='/'; pathelements=(${LINE:1})
+    for ((i = 0 ; i <= $(( ${#pathelements[@]} - 2 )) ; i++)); do
+        [ ! -d ${pathelements[$i]} ] && mkdir ${pathelements[$i]}
+        cd ${pathelements[$i]}
+        copypath=$(pwd)
+    done
+    unset IFS
+
     # Ueberpruefen, ob der Pfad ein Verzeichnis ist
     if [ -d "$LINE" ]; then
         # Rekursives Kopieren des Verzeichnisses
         echo "   ... kopieren Verzeichnis"
-        cp -r "$LINE" "${BACKUP_DIR}/"
+        cp -r "$LINE" "${copypath}/"
     else
-        echo "   ... kopieren Datei"
-        # Directory Pfad anlegen
-        echo "   ... ... anlegen Sub-Directory"
-        cd ${BACKUP_DIR}
-        copypath=$(pwd)
-
-        IFS='/'; pathelements=(${LINE:1})
-        for ((i = 0 ; i <= $(( ${#pathelements[@]} - 2 )) ; i++)); do
-            [ ! -d ${pathelements[$i]} ] && mkdir ${pathelements[$i]}
-            cd ${pathelements[$i]}
-            copypath=$(pwd)
-        done
-        unset IFS
-
         # Datei kopieren
+        echo "   ... kopieren Datei"
         cp ${LINE} ${copypath}/
     fi
 done < ${CONFIG_DIRS}
