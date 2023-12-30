@@ -6,19 +6,32 @@ Zum Sichern wird rclone verwendet, so dass die Daten in beliebigen Cloud-Speiche
 
 Die Sicherung wird nach einem konfigurierbaren Gerätenamen benannt. Die Anzahl der aufzubewahrenden täglichen Sicherungen ist ebenfalls konfigurierbar.
 
-Systemdateien, automatisch gesichert, müssen nicht in der config angegeben sein:
+## automatisch gesicherte Systemdateien
+Diese müssen nicht in der config angegeben sein:
+````
 /boot/config.txt
 /boot/cmdline.txt
 /proc/cpuinfo
 /etc/hostname
 /etc/logrotate.conf
-Crontabs von pi und root
 rclone config
-aktuelle Prozessliste (ps -ax)
+````
+
+## Systemzustände die gesichert werden
+Die Ausgabe nachfolgender Befehle werden ebenfalls gesichert
+````
+(sudo) crontab -l
+ps -ax
+systemctl list-units --type=service
+dpkg --get-selections
+lsblk
+df -h
+````
 
 # Versionen
 Dezember 2022   initiale Version
-Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben
+
+Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben und diverse Systembefahlausgaben
 
 # Installation
 
