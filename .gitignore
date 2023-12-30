@@ -1,0 +1,9 @@
+# Ignoriere alle .txt Dateien im Verzeichnis backup/.config
+backup/.config/*.txt
+backup/.config/*.conf
+backup/.config/*.sh
+
+# Aber behalte .txt-muster Dateien
+!backup/.config/*.txt-muster
+!backup/.config/*.conf-muster
+!backup/.config/*.sh-muster

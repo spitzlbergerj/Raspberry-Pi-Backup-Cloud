@@ -67,6 +67,7 @@ cp /boot/config.txt ${BACKUP_DIR}/boot
 cp /boot/cmdline.txt ${BACKUP_DIR}/boot
 cp /proc/cpuinfo ${BACKUP_DIR}/proc
 cp /etc/hostname ${BACKUP_DIR}/etc
+cp /etc/fstab ${BACKUP_DIR}/etc
 
 # logrotate
 cp /etc/logrotate.conf ${BACKUP_DIR}/etc
@@ -76,6 +77,14 @@ printf "\nCrontabs sichern ...\n"
 mkdir ${BACKUP_DIR}/crontab
 crontab -u pi -l > ${BACKUP_DIR}/crontab/crontab-pi.txt
 crontab -u root -l > ${BACKUP_DIR}/crontab/crontab-root.txt
+
+# Systemdienste, Software
+printf "\nSystemdienste sichern ...\n"
+mkdir ${BACKUP_DIR}/dienste_software
+systemctl list-units --type=service > ${BACKUP_DIR}/dienste_software/systemctl_list_units_service.txt
+dpkg --get-selections > ${BACKUP_DIR}/dienste_software/dpkg_installierte_packete.txt
+lsblk > ${BACKUP_DIR}/dienste_software/lsblk.txt
+df -h > ${BACKUP_DIR}/dienste_software/df_h.txt
 
 # rclone
 printf "\nrclone config sichern ...\n"
