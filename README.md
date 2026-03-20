@@ -31,6 +31,7 @@ df -h
 # Versionen
 Dezember 2022   initiale Version  
 Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben und diverse Systembefahlausgaben
+März 2026       in der config können nun auch Wildcards verwendet werden und Kommentare (#) eingefügt werden
 
 # Installation
 
@@ -71,7 +72,7 @@ Im Backup Pfad unter .config finden sich alle Konfigurationen
 Die Benennung des Rechners und die Anzahl der aufzubewahrenden Tage finden sich in ```.config/backup_name.txt```
 
 Die die sichernden Dateien finden sich in ```.config/backup_dirs.txt```
-Hierbei sind stets vollkommende Pfade anzugeben. Wildcards wie "*" und "?" sind nicht (derzeit) erlaubt
+Hierbei sind stets vollkommende Pfade auf Dateien oder Verzeichnisse anzugeben. Wildcards wie "*" und "?" sind erlaubt
 
 Die Konfiguration für rclone befindet sich in ```.config/rclone.conf```
 
