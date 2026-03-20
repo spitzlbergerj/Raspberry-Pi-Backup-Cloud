@@ -30,7 +30,7 @@ df -h
 
 # Versionen
 Dezember 2022   initiale Version  
-Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben und diverse Systembefahlausgaben
+Dezember 2023   Erweiterung um die Möglichkeit in der config auch Verzeichnisse anzugeben und diverse Systembefahlausgaben  
 März 2026       in der config können nun auch Wildcards verwendet werden und Kommentare (#) eingefügt werden
 
 # Installation
